@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+ xmlns:th="http://www.thymeleaf.org"
+ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+ layout:decorator="layout">
+<head>
+<meta charset="UTF-8">
+<title>User Home</title>
+</head>
+<body>
+	<!-- content -->
+	<div layout:fragment="content">
+		<p>Welcome <span sec:authentication="principal.username">User Authentication</span></p>
+		<p><a th:href="@{/logout}">Logout & Clear Session</a></p>
+		
+		<!-- tampilan ini akan muncul berdasarkan user role yang login -->
+		<div sec:authorize="hasRole('ROLE_ADMIN')">
+			<h3>This Is Page Admin</h3>
+			<p><a th:href="@{/admin/home}">Admin Home</a></p>
+		</div>	
+		<h3>Form With CSRF Token</h3>
+		<form th:action="@{/message}" method="post">
+			<textarea name="content" cols="50" rows="5"></textarea>
+			<br/>
+			<input type="submit" value="Send"/>
+		</form>
+		<div>
+			<br/>
+			<div class="panel panel-default">
+				<div class="panel-heading">Messages</div>
+				<p th:each="msg : ${msgs}" th:text="${msg.content}"></p>
+			</div>
+		</div>
+	</div>
+	<!-- content -->
+</body>
+</html>
